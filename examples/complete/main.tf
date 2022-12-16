@@ -109,7 +109,7 @@ module "warehouse_resource_monitor" {
   enabled = true
 
   name       = "warehouse"
-  attributes = ["resource_monitor"]
+  attributes = ["resource", "monitor"]
 
   credit_quota = 20
 
@@ -163,7 +163,7 @@ module "account_resource_monitor" {
   set_for_account = true
 
   name       = "account"
-  attributes = ["resource_monitor"]
+  attributes = ["resource", "monitor"]
 
   credit_quota = 200
 
