@@ -1,10 +1,3 @@
-/*
-* # Snowflake Resource Monitor
-* 
-* Terraform module that can create and manage Snowflake Resource Monitors.
-* Additionally it creates predefined access roles to simplyfiy user-access management
-*/
-
 resource "snowflake_resource_monitor" "this" {
   count = local.enabled
 
