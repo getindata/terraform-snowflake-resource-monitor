@@ -106,6 +106,7 @@ Additionally it creates predefined access roles to simplyfiy user-access managem
 | Name | Description |
 |------|-------------|
 | <a name="output_resource_monitor"></a> [resource\_monitor](#output\_resource\_monitor) | Details of the resource monitor |
+| <a name="output_roles"></a> [roles](#output\_roles) | Functional roles created for warehouse |
 
 ## Providers
 
