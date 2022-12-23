@@ -102,8 +102,18 @@ module "resource_monitors" {
 
 | Name | Description |
 |------|-------------|
-| <a name="output_resource_monitor"></a> [resource\_monitor](#output\_resource\_monitor) | Details of the resource monitor |
+| <a name="output_credit_quota"></a> [credit\_quota](#output\_credit\_quota) | he number of credits allocated monthly to the resource monitor |
+| <a name="output_end_timestamp"></a> [end\_timestamp](#output\_end\_timestamp) | The date and time when the resource monitor suspends the assigned warehouses |
+| <a name="output_frequency"></a> [frequency](#output\_frequency) | The frequency interval at which the credit usage resets to 0 |
+| <a name="output_name"></a> [name](#output\_name) | Name of resource monitor |
+| <a name="output_notify_triggers"></a> [notify\_triggers](#output\_notify\_triggers) | A list of percentage thresholds at which to send an alert to subscribed users |
+| <a name="output_notify_users"></a> [notify\_users](#output\_notify\_users) | A list of users to receive email notifications on resource monitors |
 | <a name="output_roles"></a> [roles](#output\_roles) | Functional roles created for warehouse |
+| <a name="output_set_for_account"></a> [set\_for\_account](#output\_set\_for\_account) | Whether the resource monitor should be applied globally to your Snowflake account |
+| <a name="output_start_timestamp"></a> [start\_timestamp](#output\_start\_timestamp) | The date and time when the resource monitor starts monitoring credit usage |
+| <a name="output_suspend_immediate_triggers"></a> [suspend\_immediate\_triggers](#output\_suspend\_immediate\_triggers) | A list of percentage thresholds at which to immediately suspend all warehouses |
+| <a name="output_suspend_triggers"></a> [suspend\_triggers](#output\_suspend\_triggers) | A list of percentage thresholds at which to suspend all warehouses |
+| <a name="output_warehouses"></a> [warehouses](#output\_warehouses) | A list of warehouse names to apply the resource monitor to |
 
 ## Providers
 
