@@ -1,9 +1,7 @@
 locals {
-  enabled = module.this.enabled ? 1 : 0
-
-  name_from_descriptor = module.this.enabled ? trim(replace(
-    lookup(module.this.descriptors, var.descriptor_name, module.this.id), "/${module.this.delimiter}${module.this.delimiter}+/", module.this.delimiter
-  ), module.this.delimiter) : null
+  name_from_descriptor = module.monitor_label.enabled ? trim(replace(
+    lookup(module.monitor_label.descriptors, var.descriptor_name, module.monitor_label.id), "/${module.monitor_label.delimiter}${module.monitor_label.delimiter}+/", module.monitor_label.delimiter
+  ), module.monitor_label.delimiter) : null
 
   default_roles = var.create_default_roles ? {
     monitor = {
