@@ -94,9 +94,8 @@ module "resource_monitors" {
 
 | Name | Source | Version |
 |------|--------|---------|
-| <a name="module_monitor_label"></a> [monitor\_label](#module\_monitor\_label) | cloudposse/label/null | 0.25.0 |
 | <a name="module_roles_deep_merge"></a> [roles\_deep\_merge](#module\_roles\_deep\_merge) | Invicton-Labs/deepmerge/null | 0.1.5 |
-| <a name="module_snowflake_role"></a> [snowflake\_role](#module\_snowflake\_role) | getindata/role/snowflake | 1.0.3 |
+| <a name="module_snowflake_role"></a> [snowflake\_role](#module\_snowflake\_role) | getindata/role/snowflake | 1.0.0 |
 | <a name="module_this"></a> [this](#module\_this) | cloudposse/label/null | 0.25.0 |
 
 ## Outputs
@@ -127,7 +126,7 @@ module "resource_monitors" {
 | Name | Version |
 |------|---------|
 | <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.3 |
-| <a name="requirement_snowflake"></a> [snowflake](#requirement\_snowflake) | ~> 0.51 |
+| <a name="requirement_snowflake"></a> [snowflake](#requirement\_snowflake) | ~> 0.54 |
 
 ## Resources
 
