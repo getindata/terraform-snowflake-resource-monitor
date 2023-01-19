@@ -130,9 +130,9 @@ module "warehouse_resource_monitor" {
       granted_to_roles = [snowflake_role.this_admin.name]
     }
     custom_role = {
-      privileges       = ["MONITOR", "MODIFY"]
-      granted_to_roles = [snowflake_role.this_dev.name]
-      granted_to_users = [snowflake_user.this_user.name]
+      resource_monitor_grants = ["MONITOR", "MODIFY"]
+      granted_to_roles        = [snowflake_role.this_dev.name]
+      granted_to_users        = [snowflake_user.this_user.name]
     }
   }
 }
