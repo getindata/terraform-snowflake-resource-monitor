@@ -9,7 +9,7 @@ module "monitor_label" {
 }
 
 resource "snowflake_resource_monitor" "this" {
-  count = module.monitor_label.enabled ? 1 : 0
+  count = local.enabled ? 1 : 0
 
   name = local.name_from_descriptor
 
@@ -29,30 +29,47 @@ resource "snowflake_resource_monitor" "this" {
   warehouses      = var.warehouses
 }
 
-module "snowflake_role" {
-  for_each = local.roles
+module "snowflake_default_role" {
+  for_each = local.default_roles
 
   source  = "getindata/role/snowflake"
   version = "1.0.3"
-
   context = module.this.context
-  enabled = module.this.enabled && lookup(each.value, "enabled", true)
 
-  name       = each.key
-  attributes = ["RMN", one(snowflake_resource_monitor.this).name]
+  name            = each.key
+  attributes      = ["RMN", one(snowflake_resource_monitor.this[*].name)]
+  enabled         = local.create_default_roles && lookup(each.value, "enabled", true)
+  descriptor_name = lookup(each.value, "descriptor_name", "snowflake-role")
 
-  granted_to_users = lookup(each.value, "granted_to_users", [])
-  granted_to_roles = lookup(each.value, "granted_to_roles", [])
-  granted_roles    = lookup(each.value, "granted_roles", [])
+  role_ownership_grant = lookup(each.value, "role_ownership_grant", "SYSADMIN")
+  granted_to_users     = lookup(each.value, "granted_to_users", [])
+  granted_to_roles     = lookup(each.value, "granted_to_roles", [])
+  granted_roles        = lookup(each.value, "granted_roles", [])
+}
+
+module "snowflake_custom_role" {
+  for_each = local.custom_roles
+
+  source  = "getindata/role/snowflake"
+  version = "1.0.3"
+  context = module.this.context
+
+  name            = each.key
+  attributes      = ["RMN", one(snowflake_resource_monitor.this[*].name)]
+  enabled         = local.create_default_roles && lookup(each.value, "enabled", true)
+  descriptor_name = lookup(each.value, "descriptor_name", "snowflake-role")
+
+  role_ownership_grant = lookup(each.value, "role_ownership_grant", "SYSADMIN")
+  granted_to_users     = lookup(each.value, "granted_to_users", [])
+  granted_to_roles     = lookup(each.value, "granted_to_roles", [])
+  granted_roles        = lookup(each.value, "granted_roles", [])
 }
 
 resource "snowflake_resource_monitor_grant" "this" {
-  for_each = module.monitor_label.enabled ? transpose(
-    {
-      for role_name, role in module.snowflake_role : module.snowflake_role[role_name].name =>
-      local.roles[role_name].privileges if lookup(local.roles[role_name], "enabled", true)
-    }
-  ) : {}
+  for_each = local.enabled ? transpose({ for role_name, role in local.roles : local.roles[role_name].name =>
+    lookup(local.roles_definition[role_name], "resource_monitor_grants", [])
+    if lookup(local.roles_definition[role_name], "enabled", true)
+  }) : {}
 
   monitor_name = one(resource.snowflake_resource_monitor.this[*]).name
   privilege    = each.key

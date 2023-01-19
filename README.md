@@ -80,7 +80,7 @@ module "resource_monitors" {
 | <a name="input_notify_triggers"></a> [notify\_triggers](#input\_notify\_triggers) | A list of percentage thresholds at which to send an alert to subscribed users. | `list(number)` | `null` | no |
 | <a name="input_notify_users"></a> [notify\_users](#input\_notify\_users) | Specifies the list of users to receive email notifications on resource monitors. | `list(string)` | `null` | no |
 | <a name="input_regex_replace_chars"></a> [regex\_replace\_chars](#input\_regex\_replace\_chars) | Terraform regular expression (regex) string.<br>Characters matching the regex will be removed from the ID elements.<br>If not set, `"/[^a-zA-Z0-9-]/"` is used to remove all characters other than hyphens, letters and digits. | `string` | `null` | no |
-| <a name="input_roles"></a> [roles](#input\_roles) | Roles created on the Resource Monitor level | `any` | `{}` | no |
+| <a name="input_roles"></a> [roles](#input\_roles) | Roles created on the Resource Monitor level | <pre>map(object({<br>    enabled                 = optional(bool, true)<br>    descriptor_name         = optional(string, "snowflake-role")<br>    comment                 = optional(string)<br>    role_ownership_grant    = optional(string)<br>    granted_roles           = optional(list(string))<br>    granted_to_roles        = optional(list(string))<br>    granted_to_users        = optional(list(string))<br>    resource_monitor_grants = optional(list(string))<br>  }))</pre> | `{}` | no |
 | <a name="input_set_for_account"></a> [set\_for\_account](#input\_set\_for\_account) | Specifies whether the resource monitor should be applied globally to your Snowflake account. | `bool` | `true` | no |
 | <a name="input_stage"></a> [stage](#input\_stage) | ID element. Usually used to indicate role, e.g. 'prod', 'staging', 'source', 'build', 'test', 'deploy', 'release' | `string` | `null` | no |
 | <a name="input_start_timestamp"></a> [start\_timestamp](#input\_start\_timestamp) | The date and time when the resource monitor starts monitoring credit usage for the assigned warehouses. | `string` | `null` | no |
@@ -96,7 +96,8 @@ module "resource_monitors" {
 |------|--------|---------|
 | <a name="module_monitor_label"></a> [monitor\_label](#module\_monitor\_label) | cloudposse/label/null | 0.25.0 |
 | <a name="module_roles_deep_merge"></a> [roles\_deep\_merge](#module\_roles\_deep\_merge) | Invicton-Labs/deepmerge/null | 0.1.5 |
-| <a name="module_snowflake_role"></a> [snowflake\_role](#module\_snowflake\_role) | getindata/role/snowflake | 1.0.3 |
+| <a name="module_snowflake_custom_role"></a> [snowflake\_custom\_role](#module\_snowflake\_custom\_role) | getindata/role/snowflake | 1.0.3 |
+| <a name="module_snowflake_default_role"></a> [snowflake\_default\_role](#module\_snowflake\_default\_role) | getindata/role/snowflake | 1.0.3 |
 | <a name="module_this"></a> [this](#module\_this) | cloudposse/label/null | 0.25.0 |
 
 ## Outputs
@@ -109,7 +110,7 @@ module "resource_monitors" {
 | <a name="output_name"></a> [name](#output\_name) | Name of resource monitor |
 | <a name="output_notify_triggers"></a> [notify\_triggers](#output\_notify\_triggers) | A list of percentage thresholds at which to send an alert to subscribed users |
 | <a name="output_notify_users"></a> [notify\_users](#output\_notify\_users) | A list of users to receive email notifications on resource monitors |
-| <a name="output_roles"></a> [roles](#output\_roles) | Functional roles created for warehouse |
+| <a name="output_roles"></a> [roles](#output\_roles) | Access roles created for resource monitor |
 | <a name="output_set_for_account"></a> [set\_for\_account](#output\_set\_for\_account) | Whether the resource monitor should be applied globally to your Snowflake account |
 | <a name="output_start_timestamp"></a> [start\_timestamp](#output\_start\_timestamp) | The date and time when the resource monitor starts monitoring credit usage |
 | <a name="output_suspend_immediate_triggers"></a> [suspend\_immediate\_triggers](#output\_suspend\_immediate\_triggers) | A list of percentage thresholds at which to immediately suspend all warehouses |
@@ -120,14 +121,14 @@ module "resource_monitors" {
 
 | Name | Version |
 |------|---------|
-| <a name="provider_snowflake"></a> [snowflake](#provider\_snowflake) | ~> 0.51 |
+| <a name="provider_snowflake"></a> [snowflake](#provider\_snowflake) | ~> 0.54 |
 
 ## Requirements
 
 | Name | Version |
 |------|---------|
 | <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.3 |
-| <a name="requirement_snowflake"></a> [snowflake](#requirement\_snowflake) | ~> 0.51 |
+| <a name="requirement_snowflake"></a> [snowflake](#requirement\_snowflake) | ~> 0.54 |
 
 ## Resources
 

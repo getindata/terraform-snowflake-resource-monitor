@@ -64,8 +64,17 @@ variable "warehouses" {
 
 variable "roles" {
   description = "Roles created on the Resource Monitor level"
-  type        = any
-  default     = {}
+  type = map(object({
+    enabled                 = optional(bool, true)
+    descriptor_name         = optional(string, "snowflake-role")
+    comment                 = optional(string)
+    role_ownership_grant    = optional(string)
+    granted_roles           = optional(list(string))
+    granted_to_roles        = optional(list(string))
+    granted_to_users        = optional(list(string))
+    resource_monitor_grants = optional(list(string))
+  }))
+  default = {}
 }
 
 variable "create_default_roles" {
