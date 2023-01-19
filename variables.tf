@@ -66,6 +66,7 @@ variable "roles" {
   description = "Roles created on the Resource Monitor level"
   type = map(object({
     enabled                 = optional(bool, true)
+    descriptor_name         = optional(string, "snowflake-role")
     comment                 = optional(string)
     role_ownership_grant    = optional(string)
     granted_roles           = optional(list(string))
