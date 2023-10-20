@@ -43,7 +43,7 @@ resource "snowflake_role" "this_dev" {
 
 module "warehouse_users" {
   source  = "getindata/warehouse/snowflake"
-  version = "1.0.0"
+  version = "2.1.0"
 
   name    = "warehouse_users"
   comment = "warehouse for users"
@@ -65,7 +65,7 @@ module "warehouse_users" {
 
 module "warehouse_dbt" {
   source  = "getindata/warehouse/snowflake"
-  version = "1.0.0"
+  version = "2.1.0"
 
   name    = "warehouse_dbt"
   comment = "warehouse for dbt usage"
