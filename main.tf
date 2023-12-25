@@ -33,7 +33,7 @@ module "snowflake_default_role" {
   for_each = local.default_roles
 
   source  = "getindata/role/snowflake"
-  version = "1.0.3"
+  version = "1.2.0"
   context = module.this.context
 
   name            = each.key
@@ -51,7 +51,7 @@ module "snowflake_custom_role" {
   for_each = local.custom_roles
 
   source  = "getindata/role/snowflake"
-  version = "1.0.3"
+  version = "1.2.0"
   context = module.this.context
 
   name            = each.key
