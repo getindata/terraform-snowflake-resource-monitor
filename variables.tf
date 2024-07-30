@@ -32,15 +32,15 @@ variable "notify_triggers" {
   default     = null
 }
 
-variable "suspend_triggers" {
-  description = "A list of percentage thresholds at which to suspend all warehouses."
-  type        = list(number)
+variable "suspend_trigger" {
+  description = "The number that represents the percentage threshold at which to suspend all warehouses."
+  type        = number
   default     = null
 }
 
-variable "suspend_immediate_triggers" {
-  description = "A list of percentage thresholds at which to immediately suspend all warehouses."
-  type        = list(number)
+variable "suspend_immediate_trigger" {
+  description = "The number that represents the percentage threshold at which to immediately suspend all warehouses."
+  type        = number
   default     = null
 }
 
@@ -53,7 +53,7 @@ variable "notify_users" {
 variable "set_for_account" {
   description = "Specifies whether the resource monitor should be applied globally to your Snowflake account."
   type        = bool
-  default     = true
+  default     = false
 }
 
 variable "warehouses" {
@@ -65,14 +65,18 @@ variable "warehouses" {
 variable "roles" {
   description = "Roles created on the Resource Monitor level"
   type = map(object({
-    enabled                 = optional(bool, true)
-    descriptor_name         = optional(string, "snowflake-role")
-    comment                 = optional(string)
-    role_ownership_grant    = optional(string)
-    granted_roles           = optional(list(string))
-    granted_to_roles        = optional(list(string))
-    granted_to_users        = optional(list(string))
-    resource_monitor_grants = optional(list(string))
+    enabled              = optional(bool, true)
+    descriptor_name      = optional(string, "snowflake-role")
+    comment              = optional(string)
+    role_ownership_grant = optional(string)
+    granted_roles        = optional(list(string))
+    granted_to_roles     = optional(list(string))
+    granted_to_users     = optional(list(string))
+    resource_monitor_grants = optional(object({
+      all_privileges    = optional(bool)
+      with_grant_option = optional(bool, false)
+      privileges        = optional(list(string))
+    }))
   }))
   default = {}
 }

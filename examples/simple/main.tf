@@ -16,6 +16,6 @@ module "resource_monitor" {
 
   credit_quota = 200
 
-  notify_triggers  = [50, 80, 90]
-  suspend_triggers = [100]
+  notify_triggers = [50, 80, 90]
+  suspend_trigger = 100
 }

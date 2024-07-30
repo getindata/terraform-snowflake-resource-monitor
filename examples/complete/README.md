@@ -43,9 +43,9 @@ This example creates:
 |------|--------|---------|
 | <a name="module_account_resource_monitor"></a> [account\_resource\_monitor](#module\_account\_resource\_monitor) | ../../ | n/a |
 | <a name="module_this"></a> [this](#module\_this) | cloudposse/label/null | 0.25.0 |
-| <a name="module_warehouse_dbt"></a> [warehouse\_dbt](#module\_warehouse\_dbt) | getindata/warehouse/snowflake | 1.0.0 |
+| <a name="module_warehouse_dbt"></a> [warehouse\_dbt](#module\_warehouse\_dbt) | getindata/warehouse/snowflake | 2.2.0 |
 | <a name="module_warehouse_resource_monitor"></a> [warehouse\_resource\_monitor](#module\_warehouse\_resource\_monitor) | ../../ | n/a |
-| <a name="module_warehouse_users"></a> [warehouse\_users](#module\_warehouse\_users) | getindata/warehouse/snowflake | 1.0.0 |
+| <a name="module_warehouse_users"></a> [warehouse\_users](#module\_warehouse\_users) | getindata/warehouse/snowflake | 2.2.0 |
 
 ## Outputs
 
@@ -71,8 +71,8 @@ This example creates:
 
 | Name | Type |
 |------|------|
-| [snowflake_role.this_admin](https://registry.terraform.io/providers/Snowflake-Labs/snowflake/latest/docs/resources/role) | resource |
-| [snowflake_role.this_dev](https://registry.terraform.io/providers/Snowflake-Labs/snowflake/latest/docs/resources/role) | resource |
+| [snowflake_account_role.this_admin](https://registry.terraform.io/providers/Snowflake-Labs/snowflake/latest/docs/resources/account_role) | resource |
+| [snowflake_account_role.this_dev](https://registry.terraform.io/providers/Snowflake-Labs/snowflake/latest/docs/resources/account_role) | resource |
 | [snowflake_user.this_dbt](https://registry.terraform.io/providers/Snowflake-Labs/snowflake/latest/docs/resources/user) | resource |
 | [snowflake_user.this_user](https://registry.terraform.io/providers/Snowflake-Labs/snowflake/latest/docs/resources/user) | resource |
 <!-- END_TF_DOCS -->

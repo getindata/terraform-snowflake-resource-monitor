@@ -80,12 +80,12 @@ module "resource_monitors" {
 | <a name="input_notify_triggers"></a> [notify\_triggers](#input\_notify\_triggers) | A list of percentage thresholds at which to send an alert to subscribed users. | `list(number)` | `null` | no |
 | <a name="input_notify_users"></a> [notify\_users](#input\_notify\_users) | Specifies the list of users to receive email notifications on resource monitors. | `list(string)` | `null` | no |
 | <a name="input_regex_replace_chars"></a> [regex\_replace\_chars](#input\_regex\_replace\_chars) | Terraform regular expression (regex) string.<br>Characters matching the regex will be removed from the ID elements.<br>If not set, `"/[^a-zA-Z0-9-]/"` is used to remove all characters other than hyphens, letters and digits. | `string` | `null` | no |
-| <a name="input_roles"></a> [roles](#input\_roles) | Roles created on the Resource Monitor level | <pre>map(object({<br>    enabled                 = optional(bool, true)<br>    descriptor_name         = optional(string, "snowflake-role")<br>    comment                 = optional(string)<br>    role_ownership_grant    = optional(string)<br>    granted_roles           = optional(list(string))<br>    granted_to_roles        = optional(list(string))<br>    granted_to_users        = optional(list(string))<br>    resource_monitor_grants = optional(list(string))<br>  }))</pre> | `{}` | no |
-| <a name="input_set_for_account"></a> [set\_for\_account](#input\_set\_for\_account) | Specifies whether the resource monitor should be applied globally to your Snowflake account. | `bool` | `true` | no |
+| <a name="input_roles"></a> [roles](#input\_roles) | Roles created on the Resource Monitor level | <pre>map(object({<br>    enabled              = optional(bool, true)<br>    descriptor_name      = optional(string, "snowflake-role")<br>    comment              = optional(string)<br>    role_ownership_grant = optional(string)<br>    granted_roles        = optional(list(string))<br>    granted_to_roles     = optional(list(string))<br>    granted_to_users     = optional(list(string))<br>    resource_monitor_grants = optional(object({<br>      all_privileges    = optional(bool)<br>      with_grant_option = optional(bool, false)<br>      privileges        = optional(list(string))<br>    }))<br>  }))</pre> | `{}` | no |
+| <a name="input_set_for_account"></a> [set\_for\_account](#input\_set\_for\_account) | Specifies whether the resource monitor should be applied globally to your Snowflake account. | `bool` | `false` | no |
 | <a name="input_stage"></a> [stage](#input\_stage) | ID element. Usually used to indicate role, e.g. 'prod', 'staging', 'source', 'build', 'test', 'deploy', 'release' | `string` | `null` | no |
 | <a name="input_start_timestamp"></a> [start\_timestamp](#input\_start\_timestamp) | The date and time when the resource monitor starts monitoring credit usage for the assigned warehouses. | `string` | `null` | no |
-| <a name="input_suspend_immediate_triggers"></a> [suspend\_immediate\_triggers](#input\_suspend\_immediate\_triggers) | A list of percentage thresholds at which to immediately suspend all warehouses. | `list(number)` | `null` | no |
-| <a name="input_suspend_triggers"></a> [suspend\_triggers](#input\_suspend\_triggers) | A list of percentage thresholds at which to suspend all warehouses. | `list(number)` | `null` | no |
+| <a name="input_suspend_immediate_trigger"></a> [suspend\_immediate\_trigger](#input\_suspend\_immediate\_trigger) | The number that represents the percentage threshold at which to immediately suspend all warehouses. | `number` | `null` | no |
+| <a name="input_suspend_trigger"></a> [suspend\_trigger](#input\_suspend\_trigger) | The number that represents the percentage threshold at which to suspend all warehouses. | `number` | `null` | no |
 | <a name="input_tags"></a> [tags](#input\_tags) | Additional tags (e.g. `{'BusinessUnit': 'XYZ'}`).<br>Neither the tag keys nor the tag values will be modified by this module. | `map(string)` | `{}` | no |
 | <a name="input_tenant"></a> [tenant](#input\_tenant) | ID element \_(Rarely used, not included by default)\_. A customer identifier, indicating who this instance of a resource is for | `string` | `null` | no |
 | <a name="input_warehouses"></a> [warehouses](#input\_warehouses) | A list of warehouse names to apply the resource monitor to. | `list(string)` | `null` | no |
@@ -96,8 +96,8 @@ module "resource_monitors" {
 |------|--------|---------|
 | <a name="module_monitor_label"></a> [monitor\_label](#module\_monitor\_label) | cloudposse/label/null | 0.25.0 |
 | <a name="module_roles_deep_merge"></a> [roles\_deep\_merge](#module\_roles\_deep\_merge) | Invicton-Labs/deepmerge/null | 0.1.5 |
-| <a name="module_snowflake_custom_role"></a> [snowflake\_custom\_role](#module\_snowflake\_custom\_role) | getindata/role/snowflake | 1.0.3 |
-| <a name="module_snowflake_default_role"></a> [snowflake\_default\_role](#module\_snowflake\_default\_role) | getindata/role/snowflake | 1.0.3 |
+| <a name="module_snowflake_custom_role"></a> [snowflake\_custom\_role](#module\_snowflake\_custom\_role) | getindata/role/snowflake | 2.1.0 |
+| <a name="module_snowflake_default_role"></a> [snowflake\_default\_role](#module\_snowflake\_default\_role) | getindata/role/snowflake | 2.1.0 |
 | <a name="module_this"></a> [this](#module\_this) | cloudposse/label/null | 0.25.0 |
 
 ## Outputs
@@ -121,21 +121,20 @@ module "resource_monitors" {
 
 | Name | Version |
 |------|---------|
-| <a name="provider_snowflake"></a> [snowflake](#provider\_snowflake) | ~> 0.54 |
+| <a name="provider_snowflake"></a> [snowflake](#provider\_snowflake) | ~> 0.94 |
 
 ## Requirements
 
 | Name | Version |
 |------|---------|
 | <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.3 |
-| <a name="requirement_snowflake"></a> [snowflake](#requirement\_snowflake) | ~> 0.54 |
+| <a name="requirement_snowflake"></a> [snowflake](#requirement\_snowflake) | ~> 0.94 |
 
 ## Resources
 
 | Name | Type |
 |------|------|
 | [snowflake_resource_monitor.this](https://registry.terraform.io/providers/Snowflake-Labs/snowflake/latest/docs/resources/resource_monitor) | resource |
-| [snowflake_resource_monitor_grant.this](https://registry.terraform.io/providers/Snowflake-Labs/snowflake/latest/docs/resources/resource_monitor_grant) | resource |
 <!-- END_TF_DOCS -->
 
 ## CONTRIBUTING
