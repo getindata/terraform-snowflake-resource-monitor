@@ -8,10 +8,18 @@ locals {
 
   default_roles_definition = {
     readonly = {
-      resource_monitor_grants = ["MONITOR"]
+      resource_monitor_grants = {
+        privileges        = ["MONITOR"]
+        with_grant_option = false
+        all_privileges    = null
+      }
     }
     admin = {
-      resource_monitor_grants = ["MODIFY", "MONITOR"]
+      resource_monitor_grants = {
+        privileges        = null
+        with_grant_option = false
+        all_privileges    = true
+      }
     }
   }
 

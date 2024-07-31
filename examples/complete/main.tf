@@ -14,36 +14,31 @@
 */
 
 resource "snowflake_user" "this_user" {
-  name         = "Example user"
-  login_name   = "example_user"
-  comment      = "Example snowflake user."
-  password     = "P@55w0rd"
-  display_name = "Example User"
-  email        = "snowflake@sexample.com"
+  name    = "example_user"
+  comment = "Example snowflake user."
 
   must_change_password = true
 }
 
 resource "snowflake_user" "this_dbt" {
-  name       = "DBT user"
-  login_name = "dbt_user"
-  comment    = "DBT user."
+  name    = "dbt_user"
+  comment = "DBT user."
 }
 
 
-resource "snowflake_role" "this_admin" {
+resource "snowflake_account_role" "this_admin" {
   name    = "ADMIN"
   comment = "Role for Snowflake Administrators"
 }
 
-resource "snowflake_role" "this_dev" {
+resource "snowflake_account_role" "this_dev" {
   name    = "USER"
   comment = "Role for Snowflake Users"
 }
 
 module "warehouse_users" {
   source  = "getindata/warehouse/snowflake"
-  version = "1.0.0"
+  version = "2.2.0"
 
   name    = "warehouse_users"
   comment = "warehouse for users"
@@ -65,7 +60,7 @@ module "warehouse_users" {
 
 module "warehouse_dbt" {
   source  = "getindata/warehouse/snowflake"
-  version = "1.0.0"
+  version = "2.2.0"
 
   name    = "warehouse_dbt"
   comment = "warehouse for dbt usage"
@@ -83,6 +78,8 @@ module "warehouse_dbt" {
       granted_to_users = ["dbt_user"]
     }
   }
+
+  depends_on = [snowflake_user.this_dbt]
 }
 
 /*
@@ -114,12 +111,11 @@ module "warehouse_resource_monitor" {
   credit_quota = 20
 
   frequency       = "MONTHLY"
-  start_timestamp = "2022-12-01T00:00:00"
-  end_timestamp   = "2023-03-31T00:00:00"
+  start_timestamp = formatdate("YYYY-MM-DD HH:MM", timeadd(timestamp(), "1h"))
+  end_timestamp   = formatdate("YYYY-MM-DD HH:MM", timeadd(timestamp(), "1000h"))
 
-  suspend_triggers = [100]
-  notify_triggers  = [50, 80]
-  notify_users     = ["example_user"]
+  suspend_trigger = 100
+  notify_triggers = [50, 80]
 
   warehouses = [module.warehouse_users.warehouse.name]
 
@@ -127,14 +123,24 @@ module "warehouse_resource_monitor" {
 
   roles = {
     admin = {
-      granted_to_roles = [snowflake_role.this_admin.name]
+      granted_to_roles = [snowflake_account_role.this_admin.name]
     }
     custom_role = {
-      resource_monitor_grants = ["MONITOR", "MODIFY"]
-      granted_to_roles        = [snowflake_role.this_dev.name]
-      granted_to_users        = [snowflake_user.this_user.name]
+      resource_monitor_grants = {
+        privileges = ["MONITOR", "MODIFY"]
+      }
+      granted_to_roles = [snowflake_account_role.this_dev.name]
+      granted_to_users = [nonsensitive(snowflake_user.this_user.name)]
     }
   }
+
+
+  depends_on = [
+    snowflake_account_role.this_dev,
+    snowflake_account_role.this_admin,
+    snowflake_user.this_user,
+    module.warehouse_users.warehouse,
+  ]
 }
 
 /* 
@@ -167,18 +173,20 @@ module "account_resource_monitor" {
 
   credit_quota = 200
 
-  frequency = "MONTHLY"
+  start_timestamp = formatdate("YYYY-MM-DD HH:MM", timeadd(timestamp(), "1h"))
+  frequency       = "MONTHLY"
 
-  notify_triggers            = [50, 80, 90]
-  notify_users               = ["example_user"]
-  suspend_immediate_triggers = [100]
+  notify_triggers           = [50, 80, 90]
+  suspend_immediate_trigger = 100
 
   create_default_roles = true
 
   roles = {
     admin = {
-      granted_to_roles = [snowflake_role.this_admin.name]
+      granted_to_roles = [snowflake_account_role.this_admin.name]
     }
   }
+
+  depends_on = [snowflake_account_role.this_admin]
 
 }
