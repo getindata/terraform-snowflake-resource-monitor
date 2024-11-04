@@ -1,10 +1,14 @@
 locals {
-  name_from_descriptor = module.monitor_label.enabled ? trim(replace(
-    lookup(module.monitor_label.descriptors, var.descriptor_name, module.monitor_label.id), "/${module.monitor_label.delimiter}${module.monitor_label.delimiter}+/", module.monitor_label.delimiter
-  ), module.monitor_label.delimiter) : null
+  context_template = lookup(var.context_templates, var.name_scheme.context_template_name, null)
 
-  enabled              = module.this.enabled
-  create_default_roles = local.enabled && var.create_default_roles
+  default_role_naming_scheme = {
+    properties            = ["prefix", "environment", "resource-monitor", "name"]
+    context_template_name = "snowflake-resource-monitor-role"
+    extra_values = {
+      prefix           = "rmn"
+      resource-monitor = var.name
+    }
+  }
 
   default_roles_definition = {
     readonly = {
