@@ -119,7 +119,7 @@ Additionally, due to breaking changes introduced in `snowflake` terraform provid
 
 | Name | Description |
 |------|-------------|
-| <a name="output_credit_quota"></a> [credit\_quota](#output\_credit\_quota) | he number of credits allocated monthly to the resource monitor |
+| <a name="output_credit_quota"></a> [credit\_quota](#output\_credit\_quota) | The number of credits allocated monthly to the resource monitor |
 | <a name="output_end_timestamp"></a> [end\_timestamp](#output\_end\_timestamp) | The date and time when the resource monitor suspends the assigned warehouses |
 | <a name="output_frequency"></a> [frequency](#output\_frequency) | The frequency interval at which the credit usage resets to 0 |
 | <a name="output_name"></a> [name](#output\_name) | Name of resource monitor |
