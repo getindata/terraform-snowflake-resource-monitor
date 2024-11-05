@@ -32,7 +32,7 @@ moved {
 }
 
 module "snowflake_default_role" {
-  for_each = var.create_default_roles ? local.default_roles : tomap({})
+  for_each = local.default_roles
 
   source  = "getindata/role/snowflake"
   version = "3.0.1"

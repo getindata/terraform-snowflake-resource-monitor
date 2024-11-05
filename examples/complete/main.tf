@@ -3,14 +3,15 @@
 *
 * This example creates:
 *
-* * Resource monitor for warehouse, that will ill notify account 
+* * Resource monitor, that will will notify account 
 *   administrators and specified users when 50%, 80% of credit 
 *   quota is reached, will also suspend all warehouses assigned 
 *   to this monitor.
-* * Resource monitor for account, that will notify account 
+* * Resource monitor, that will notify account 
 *   administrators when 50%, 80%,90% of credit quota is reached,
 *   will also suspend immediately (all running queries will be cancelled)
 *   all warehouses in the account when 100% quota is reached.
+* * Resource monitor, simmilar to the abve, with different name scheme
 */
 
 resource "snowflake_user" "this_user" {
