@@ -3,14 +3,15 @@
 *
 * This example creates:
 *
-* * Resource monitor for warehouse, that will ill notify account 
+* * Resource monitor, that will will notify account 
 *   administrators and specified users when 50%, 80% of credit 
 *   quota is reached, will also suspend all warehouses assigned 
 *   to this monitor.
-* * Resource monitor for account, that will notify account 
+* * Resource monitor, that will notify account 
 *   administrators when 50%, 80%,90% of credit quota is reached,
 *   will also suspend immediately (all running queries will be cancelled)
 *   all warehouses in the account when 100% quota is reached.
+* * Resource monitor, simmilar to the abve, with different name scheme
 */
 
 resource "snowflake_user" "this_user" {
@@ -36,88 +37,25 @@ resource "snowflake_account_role" "this_dev" {
   comment = "Role for Snowflake Users"
 }
 
-module "warehouse_users" {
-  source  = "getindata/warehouse/snowflake"
-  version = "2.2.0"
-
-  name    = "warehouse_users"
-  comment = "warehouse for users"
-
-  warehouse_size = "x-small"
-
-  auto_resume         = true
-  auto_suspend        = 600
-  initially_suspended = true
-
-  create_default_roles = true
-
-  roles = {
-    usage = {
-      granted_to_roles = ["USER"]
-    }
-  }
-}
-
-module "warehouse_dbt" {
-  source  = "getindata/warehouse/snowflake"
-  version = "2.2.0"
-
-  name    = "warehouse_dbt"
-  comment = "warehouse for dbt usage"
-
-  warehouse_size = "x-small"
-
-  auto_resume         = true
-  auto_suspend        = 600
-  initially_suspended = true
-
-  create_default_roles = true
-
-  roles = {
-    usage = {
-      granted_to_users = ["dbt_user"]
-    }
-  }
-
-  depends_on = [snowflake_user.this_dbt]
-}
-
-/*
- * Resource monitor for warehouse
- * Will notify account administrators and specified users when 
- * 50%, 80% of credit quota is reached.
- * Will notify account administrators plus specified users and 
- * suspend all warehouses assigned to this monitor.
-*/
-module "warehouse_resource_monitor" {
+module "resource_monitor_1" {
   source = "../../"
 
-  descriptor_formats = {
-    snowflake-role = {
-      labels = ["attributes", "name"]
-      format = "%v_%v"
-    }
-    snowflake-resource-monitor = {
-      labels = ["name", "attributes"]
-      format = "%v_%v"
+  name = "test_1"
+  name_scheme = {
+    properties = ["environment", "project", "name"]
+    extra_values = {
+      project = "project"
     }
   }
-
-  enabled = true
-
-  name       = "warehouse"
-  attributes = ["resource", "monitor"]
 
   credit_quota = 20
 
   frequency       = "MONTHLY"
-  start_timestamp = formatdate("YYYY-MM-DD HH:MM", timeadd(timestamp(), "1h"))
-  end_timestamp   = formatdate("YYYY-MM-DD HH:MM", timeadd(timestamp(), "1000h"))
+  start_timestamp = formatdate("YYYY-MM-DD hh:mm", timeadd(plantimestamp(), "4h"))
+  end_timestamp   = formatdate("YYYY-MM-DD hh:mm", timeadd(plantimestamp(), "1000h"))
 
   suspend_trigger = 100
   notify_triggers = [50, 80]
-
-  warehouses = [module.warehouse_users.warehouse.name]
 
   create_default_roles = true
 
@@ -130,50 +68,20 @@ module "warehouse_resource_monitor" {
         privileges = ["MONITOR", "MODIFY"]
       }
       granted_to_roles = [snowflake_account_role.this_dev.name]
-      granted_to_users = [nonsensitive(snowflake_user.this_user.name)]
+      granted_to_users = [snowflake_user.this_user.name]
     }
   }
-
-
-  depends_on = [
-    snowflake_account_role.this_dev,
-    snowflake_account_role.this_admin,
-    snowflake_user.this_user,
-    module.warehouse_users.warehouse,
-  ]
 }
 
-/* 
- * Resource monitor for account.
- * Will notify account administrators when 50%, 80%,90%
- * of credit quota is reached.
- * Will notify account administrators and suspend immediately 
- * (all running queries will be cancelled) all warehouses in
- * the accouny when 100% quota is reached.
-*/
-module "account_resource_monitor" {
+module "resource_monitor_2" {
   source = "../../"
 
-  descriptor_formats = {
-    snowflake-role = {
-      labels = ["attributes", "name"]
-      format = "%v_%v"
-    }
-    snowflake-resource-monitor = {
-      labels = ["name", "attributes"]
-      format = "%v_%v"
-    }
-  }
-
-  enabled         = true
-  set_for_account = true
-
-  name       = "account"
-  attributes = ["resource", "monitor"]
+  name              = "test_2"
+  context_templates = var.context_templates
 
   credit_quota = 200
 
-  start_timestamp = formatdate("YYYY-MM-DD HH:MM", timeadd(timestamp(), "1h"))
+  start_timestamp = formatdate("YYYY-MM-DD hh:mm", timeadd(plantimestamp(), "4h"))
   frequency       = "MONTHLY"
 
   notify_triggers           = [50, 80, 90]
@@ -187,6 +95,34 @@ module "account_resource_monitor" {
     }
   }
 
-  depends_on = [snowflake_account_role.this_admin]
+}
+
+module "resource_monitor_3" {
+  source = "../../"
+
+  name = "test_3"
+  name_scheme = {
+    context_template_name = "snowflake-project-resource-monitor"
+    extra_values = {
+      project = "project"
+    }
+  }
+  context_templates = var.context_templates
+
+  credit_quota = 10
+
+  start_timestamp = formatdate("YYYY-MM-DD hh:mm", timeadd(plantimestamp(), "4h"))
+  frequency       = "MONTHLY"
+
+  notify_triggers           = [50, 80, 90]
+  suspend_immediate_trigger = 100
+
+  create_default_roles = true
+
+  roles = {
+    admin = {
+      granted_to_roles = [snowflake_account_role.this_admin.name]
+    }
+  }
 
 }

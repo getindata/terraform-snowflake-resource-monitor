@@ -1,17 +1,18 @@
-module "monitor_label" {
-  source  = "cloudposse/label/null"
-  version = "0.25.0"
-  context = module.this.context
+data "context_label" "this" {
+  delimiter  = local.context_template == null ? var.name_scheme.delimiter : null
+  properties = local.context_template == null ? var.name_scheme.properties : null
+  template   = local.context_template
 
-  delimiter           = coalesce(module.this.context.delimiter, "_")
-  regex_replace_chars = coalesce(module.this.context.regex_replace_chars, "/[^_a-zA-Z0-9]/")
-  label_value_case    = coalesce(module.this.context.label_value_case, "upper")
+  replace_chars_regex = var.name_scheme.replace_chars_regex
+
+  values = merge(
+    var.name_scheme.extra_values,
+    { name = var.name }
+  )
 }
 
 resource "snowflake_resource_monitor" "this" {
-  count = local.enabled ? 1 : 0
-
-  name = local.name_from_descriptor
+  name = data.context_label.this.rendered
 
   credit_quota = var.credit_quota
 
@@ -24,22 +25,23 @@ resource "snowflake_resource_monitor" "this" {
   suspend_immediate_trigger = var.suspend_immediate_trigger
 
   notify_users = var.notify_users
-
-  set_for_account = var.set_for_account
-  warehouses      = var.warehouses
+}
+moved {
+  from = snowflake_resource_monitor.this[0]
+  to   = snowflake_resource_monitor.this
 }
 
 module "snowflake_default_role" {
   for_each = local.default_roles
 
   source  = "getindata/role/snowflake"
-  version = "2.1.0"
-  context = module.this.context
+  version = "3.0.1"
 
-  name            = each.key
-  attributes      = ["RMN", one(snowflake_resource_monitor.this[*].name)]
-  enabled         = local.create_default_roles && lookup(each.value, "enabled", true)
-  descriptor_name = lookup(each.value, "descriptor_name", "snowflake-role")
+  name = each.key
+  name_scheme = merge(
+    local.default_role_naming_scheme,
+    lookup(each.value, "name_scheme", {})
+  )
 
   role_ownership_grant = lookup(each.value, "role_ownership_grant", "SYSADMIN")
   granted_to_users     = lookup(each.value, "granted_to_users", [])
@@ -51,26 +53,22 @@ module "snowflake_default_role" {
       all_privileges    = each.value.resource_monitor_grants.all_privileges
       privileges        = each.value.resource_monitor_grants.privileges
       with_grant_option = each.value.resource_monitor_grants.with_grant_option
-      object_name       = one(snowflake_resource_monitor.this[*].name)
+      object_name       = snowflake_resource_monitor.this.name
     }]
   }
-
-  depends_on = [
-    snowflake_resource_monitor.this
-  ]
 }
 
 module "snowflake_custom_role" {
   for_each = local.custom_roles
 
   source  = "getindata/role/snowflake"
-  version = "2.1.0"
-  context = module.this.context
+  version = "3.0.1"
 
-  name            = each.key
-  attributes      = ["RMN", one(snowflake_resource_monitor.this[*].name)]
-  enabled         = lookup(each.value, "enabled", true)
-  descriptor_name = lookup(each.value, "descriptor_name", "snowflake-role")
+  name = each.key
+  name_scheme = merge(
+    local.default_role_naming_scheme,
+    lookup(each.value, "name_scheme", {})
+  )
 
   role_ownership_grant = lookup(each.value, "role_ownership_grant", "SYSADMIN")
   granted_to_users     = lookup(each.value, "granted_to_users", [])
@@ -82,11 +80,7 @@ module "snowflake_custom_role" {
       all_privileges    = each.value.resource_monitor_grants.all_privileges
       privileges        = each.value.resource_monitor_grants.privileges
       with_grant_option = each.value.resource_monitor_grants.with_grant_option
-      object_name       = one(snowflake_resource_monitor.this[*].name)
+      object_name       = snowflake_resource_monitor.this.name
     }]
   }
-
-  depends_on = [
-    snowflake_resource_monitor.this
-  ]
 }

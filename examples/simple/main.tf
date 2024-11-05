@@ -10,8 +10,6 @@
 module "resource_monitor" {
   source = "../../"
 
-  set_for_account = true
-
   name = "example_resource_monitor"
 
   credit_quota = 200
