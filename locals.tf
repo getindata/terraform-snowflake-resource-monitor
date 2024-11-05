@@ -47,7 +47,7 @@ locals {
       module.snowflake_default_role,
       module.snowflake_custom_role
     ) : role_name => role
-    if role.name != null
+    if role_name != null
   }
 }
 
