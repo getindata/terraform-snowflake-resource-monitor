@@ -4,7 +4,7 @@ output "name" {
 }
 
 output "credit_quota" {
-  description = "he number of credits allocated monthly to the resource monitor"
+  description = "The number of credits allocated monthly to the resource monitor"
   value       = resource.snowflake_resource_monitor.this.credit_quota
 }
 
