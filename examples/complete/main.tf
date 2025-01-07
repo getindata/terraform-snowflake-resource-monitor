@@ -106,6 +106,7 @@ module "resource_monitor_3" {
     extra_values = {
       project = "project"
     }
+    uppercase = false
   }
   context_templates = var.context_templates
 
@@ -122,6 +123,9 @@ module "resource_monitor_3" {
   roles = {
     admin = {
       granted_to_roles = [snowflake_account_role.this_admin.name]
+      name_scheme = {
+        uppercase = true
+      }
     }
   }
 
