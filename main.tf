@@ -56,8 +56,6 @@ module "snowflake_default_role" {
       object_name       = snowflake_resource_monitor.this.name
     }]
   }
-
-  depends_on = [snowflake_resource_monitor.this]
 }
 
 module "snowflake_custom_role" {
@@ -85,6 +83,4 @@ module "snowflake_custom_role" {
       object_name       = snowflake_resource_monitor.this.name
     }]
   }
-
-  depends_on = [snowflake_resource_monitor.this]
 }
