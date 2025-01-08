@@ -12,7 +12,7 @@ data "context_label" "this" {
 }
 
 resource "snowflake_resource_monitor" "this" {
-  name = data.context_label.this.rendered
+  name = var.name_scheme.uppercase ? upper(data.context_label.this.rendered) : data.context_label.this.rendered
 
   credit_quota = var.credit_quota
 
@@ -35,7 +35,7 @@ module "snowflake_default_role" {
   for_each = local.default_roles
 
   source  = "getindata/role/snowflake"
-  version = "3.0.1"
+  version = "3.1.0"
 
   name = each.key
   name_scheme = merge(
@@ -62,7 +62,7 @@ module "snowflake_custom_role" {
   for_each = local.custom_roles
 
   source  = "getindata/role/snowflake"
-  version = "3.0.1"
+  version = "3.1.0"
 
   name = each.key
   name_scheme = merge(

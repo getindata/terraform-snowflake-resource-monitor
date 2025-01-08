@@ -64,6 +64,7 @@ variable "roles" {
       context_template_name = optional(string)
       replace_chars_regex   = optional(string)
       extra_labels          = optional(map(string))
+      uppercase             = optional(bool)
     }))
     comment              = optional(string)
     role_ownership_grant = optional(string)
@@ -93,6 +94,7 @@ variable "name_scheme" {
     - `context_template_name` - name of the context template used to create the name
     - `replace_chars_regex` - regex to use for replacing characters in property-values created by the provider - any characters that match the regex will be removed from the name
     - `extra_values` - map of extra label-value pairs, used to create a name
+    - `uppercase` - convert name to uppercase
   EOT
   type = object({
     properties            = optional(list(string), ["environment", "name"])
@@ -100,6 +102,7 @@ variable "name_scheme" {
     context_template_name = optional(string, "snowflake-resource-monitor")
     replace_chars_regex   = optional(string, "[^a-zA-Z0-9_]")
     extra_values          = optional(map(string))
+    uppercase             = optional(bool, true)
   })
   default = {}
 }

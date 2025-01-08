@@ -8,6 +8,7 @@ locals {
       prefix           = "rmn"
       resource-monitor = var.name
     }
+    uppercase = var.name_scheme.uppercase
   }
 
   default_roles_definition = {
