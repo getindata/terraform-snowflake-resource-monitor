@@ -55,8 +55,8 @@ This example creates:
 
 | Name | Type |
 |------|------|
-| [snowflake_account_role.this_admin](https://registry.terraform.io/providers/Snowflake-Labs/snowflake/latest/docs/resources/account_role) | resource |
-| [snowflake_account_role.this_dev](https://registry.terraform.io/providers/Snowflake-Labs/snowflake/latest/docs/resources/account_role) | resource |
-| [snowflake_user.this_dbt](https://registry.terraform.io/providers/Snowflake-Labs/snowflake/latest/docs/resources/user) | resource |
-| [snowflake_user.this_user](https://registry.terraform.io/providers/Snowflake-Labs/snowflake/latest/docs/resources/user) | resource |
+| [snowflake_account_role.this_admin](https://registry.terraform.io/providers/snowflakedb/snowflake/latest/docs/resources/account_role) | resource |
+| [snowflake_account_role.this_dev](https://registry.terraform.io/providers/snowflakedb/snowflake/latest/docs/resources/account_role) | resource |
+| [snowflake_user.this_dbt](https://registry.terraform.io/providers/snowflakedb/snowflake/latest/docs/resources/user) | resource |
+| [snowflake_user.this_user](https://registry.terraform.io/providers/snowflakedb/snowflake/latest/docs/resources/user) | resource |
 <!-- END_TF_DOCS -->
