@@ -35,7 +35,7 @@ module "snowflake_default_role" {
   for_each = local.default_roles
 
   source  = "getindata/role/snowflake"
-  version = "3.1.0"
+  version = "4.0.0"
 
   name = each.key
   name_scheme = merge(
@@ -62,7 +62,7 @@ module "snowflake_custom_role" {
   for_each = local.custom_roles
 
   source  = "getindata/role/snowflake"
-  version = "3.1.0"
+  version = "4.0.0"
 
   name = each.key
   name_scheme = merge(

@@ -84,6 +84,14 @@ Additionally, due to breaking changes introduced in `snowflake` terraform provid
 - Removal of `set_for_account` variable / flag (will be settable on account resource)
 - Removal of `warehouses` variable (will be settable on warehouse resource)
 
+## Breaking changes in v5.x of the module
+
+- Due to rename of Snowflake terraform provider source, all `versions.tf` files were updated accordingly.
+
+  Please keep in mind to mirror this change in your own repos also.
+
+  For more information about provider rename, refer to [Snowflake documentation](https://github.com/snowflakedb/terraform-provider-snowflake/blob/main/SNOWFLAKEDB_MIGRATION.md).
+
 <!-- BEGIN_TF_DOCS -->
 
 
@@ -112,8 +120,8 @@ Additionally, due to breaking changes introduced in `snowflake` terraform provid
 | Name | Source | Version |
 |------|--------|---------|
 | <a name="module_roles_deep_merge"></a> [roles\_deep\_merge](#module\_roles\_deep\_merge) | Invicton-Labs/deepmerge/null | 0.1.5 |
-| <a name="module_snowflake_custom_role"></a> [snowflake\_custom\_role](#module\_snowflake\_custom\_role) | getindata/role/snowflake | 3.1.0 |
-| <a name="module_snowflake_default_role"></a> [snowflake\_default\_role](#module\_snowflake\_default\_role) | getindata/role/snowflake | 3.1.0 |
+| <a name="module_snowflake_custom_role"></a> [snowflake\_custom\_role](#module\_snowflake\_custom\_role) | getindata/role/snowflake | 4.0.0 |
+| <a name="module_snowflake_default_role"></a> [snowflake\_default\_role](#module\_snowflake\_default\_role) | getindata/role/snowflake | 4.0.0 |
 
 ## Outputs
 
@@ -149,7 +157,7 @@ Additionally, due to breaking changes introduced in `snowflake` terraform provid
 
 | Name | Type |
 |------|------|
-| [snowflake_resource_monitor.this](https://registry.terraform.io/providers/Snowflake-Labs/snowflake/latest/docs/resources/resource_monitor) | resource |
+| [snowflake_resource_monitor.this](https://registry.terraform.io/providers/snowflakedb/snowflake/latest/docs/resources/resource_monitor) | resource |
 | [context_label.this](https://registry.terraform.io/providers/cloudposse/context/latest/docs/data-sources/label) | data source |
 <!-- END_TF_DOCS -->
 
